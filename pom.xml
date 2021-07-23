@@ -1,118 +1,126 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">  
-  <modelVersion>4.0.0</modelVersion>  
-  <groupId>com.gethangry.sergey</groupId>  
-  <artifactId>test-webapp</artifactId>  
-  <version>0.0.1-SNAPSHOT</version>  
-  <packaging>war</packaging>  
-  <properties> 
-    <io.github.solf.extra2.library.version>2.0.0</io.github.solf.extra2.library.version>  
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding> 
-  </properties>  
-  <profiles> 
-    <profile> 
-      <id>trunk-dep-all</id>  
-      <properties> 
-        <io.github.solf.extra2.library.version>0.0.1-SNAPSHOT</io.github.solf.extra2.library.version> 
-      </properties> 
-    </profile> 
-  </profiles>  
-  <build>
-  	<finalName>${project.artifactId}</finalName> 
-    <plugins> 
-      <plugin> 
-        <artifactId>maven-compiler-plugin</artifactId>  
-        <version>3.8.1</version>  
-        <configuration> 
-          <source>11</source>  
-          <target>11</target>  
-          <release>11</release> 
-        </configuration> 
-      </plugin>  
-      <plugin> 
-        <artifactId>maven-war-plugin</artifactId>  
-        <version>3.3.1</version>  
-        <configuration> 
-          <warSourceDirectory>WebContent</warSourceDirectory>  
-          <failOnMissingWebXml>false</failOnMissingWebXml> 
-        </configuration> 
-      </plugin>  
-      <plugin> 
-        <groupId>com.microsoft.azure</groupId>  
-        <artifactId>azure-webapp-maven-plugin</artifactId>  
-        <version>2.0.0</version>  
-        <configuration>
-		    <auth>
-		        <client>${testapp.azure.auth.client}</client>
-		        <tenant>${testapp.azure.auth.tenant}</tenant>
-		        <key>${testapp.azure.auth.key}</key>
-		        <environment>azure</environment>
-		    </auth>        
-          <schemaVersion>v2</schemaVersion>  
-          <subscriptionId>${testapp.azure.subscriptionId}</subscriptionId>  
-          <resourceGroup>DefaultFreeResourceGroup</resourceGroup>  
-          <appName>s-lv-test</appName>  
-          <pricingTier>F1</pricingTier>  
-          <region>eastus</region>  
-          <runtime> 
-            <os>Windows</os>  
-            <javaVersion>Java 11</javaVersion>  
-            <webContainer>Tomcat 9.0</webContainer> 
-          </runtime>  
-          <deployment> 
-            <resources> 
-              <resource> 
-<!--                 <directory>${project.basedir}/target</directory>   -->
-<!--                 <includes>  -->
-<!--                   <include>*.war</include>  -->
-<!--                 </includes>  -->
-                <directory>${project.basedir}</directory>  
-                <includes> 
-                  <include>build-artifacts/test-webapp.war</include> 
-                </includes> 
-              </resource> 
-            </resources> 
-          </deployment> 
-        </configuration> 
-      </plugin> 
-    </plugins> 
-  </build>  
-  <dependencies> 
-    <dependency> 
-      <groupId>org.projectlombok</groupId>  
-      <artifactId>lombok</artifactId>  
-      <version>1.18.12</version>  
-      <scope>provided</scope> 
-    </dependency>  
-    <dependency> 
-      <groupId>io.github.solf</groupId>  
-      <artifactId>extra2-epl</artifactId> 
-    </dependency>  
-    <dependency> 
-      <groupId>org.apache.tomcat</groupId>  
-      <artifactId>tomcat-catalina</artifactId>  
-      <version>9.0.38</version>  
-      <scope>provided</scope> 
-    </dependency>  
-    <dependency> 
-      <groupId>ch.qos.logback</groupId>  
-      <artifactId>logback-classic</artifactId>  
-      <version>1.2.3</version> 
-    </dependency> 
-  </dependencies>  
-  <dependencyManagement> 
-    <dependencies> 
-      <dependency> 
-        <groupId>io.github.solf</groupId>  
-        <artifactId>extra2</artifactId>  
-        <version>${io.github.solf.extra2.library.version}</version> 
-      </dependency>  
-      <dependency> 
-        <groupId>io.github.solf</groupId>  
-        <artifactId>extra2-epl</artifactId>  
-        <version>${io.github.solf.extra2.library.version}</version> 
-      </dependency> 
-    </dependencies> 
-  </dependencyManagement> 
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.gethangry.sergey</groupId>
+	<artifactId>test-webapp</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>war</packaging>
+	
+	<properties>
+		<io.github.solf.extra2.library.version>2.0.0</io.github.solf.extra2.library.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+	
+	<profiles>
+		<profile>
+			<id>trunk-dep-all</id>
+			<properties>
+				<io.github.solf.extra2.library.version>0.0.1-SNAPSHOT</io.github.solf.extra2.library.version>
+			</properties>
+		</profile>
+	</profiles>
+	
+	<build>
+		<finalName>${project.artifactId}</finalName>
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.8.1</version>
+				<configuration>
+					<source>11</source>
+					<target>11</target>
+					<release>11</release>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>3.3.1</version>
+				<configuration>
+					<warSourceDirectory>WebContent</warSourceDirectory>
+					<failOnMissingWebXml>false</failOnMissingWebXml>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>com.microsoft.azure</groupId>
+				<artifactId>azure-webapp-maven-plugin</artifactId>
+				<version>2.0.0</version>
+				<configuration>
+					<auth>
+						<client>${testapp.azure.auth.client}</client>
+						<tenant>${testapp.azure.auth.tenant}</tenant>
+						<key>${testapp.azure.auth.key}</key>
+						<environment>azure</environment>
+					</auth>
+					<schemaVersion>v2</schemaVersion>
+					<subscriptionId>${testapp.azure.subscriptionId}</subscriptionId>
+					<resourceGroup>DefaultFreeResourceGroup</resourceGroup>
+					<appName>s-lv-test</appName>
+					<pricingTier>F1</pricingTier>
+					<region>eastus</region>
+					<runtime>
+						<os>Windows</os>
+						<javaVersion>Java 11</javaVersion>
+						<webContainer>Tomcat 9.0</webContainer>
+					</runtime>
+					<deployment>
+						<resources>
+							<resource>
+								<!-- <directory>${project.basedir}/target</directory> -->
+								<!-- <includes> -->
+								<!-- <include>*.war</include> -->
+								<!-- </includes> -->
+								<directory>${project.basedir}</directory>
+								<includes>
+									<include>build-artifacts/test-webapp.war</include>
+								</includes>
+							</resource>
+						</resources>
+					</deployment>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+	
+	<dependencies>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>1.18.12</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.github.solf</groupId>
+			<artifactId>extra2-epl</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.tomcat</groupId>
+			<artifactId>tomcat-catalina</artifactId>
+			<version>9.0.38</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>1.2.3</version>
+		</dependency>
+	</dependencies>
+	
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>io.github.solf</groupId>
+				<artifactId>extra2</artifactId>
+				<version>${io.github.solf.extra2.library.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>io.github.solf</groupId>
+				<artifactId>extra2-epl</artifactId>
+				<version>${io.github.solf.extra2.library.version}</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 </project>
