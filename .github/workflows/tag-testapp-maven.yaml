@@ -11,9 +11,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
       - name: Get the tag name
         run: echo "TAG_NAME=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_ENV
+      - uses: actions/checkout@v2
       - name: Set up JDK 11
         uses: actions/setup-java@v2
         with:
@@ -35,4 +35,23 @@ jobs:
             repo_token: ${{ secrets.GITHUB_TOKEN }}
             file_glob: true
             file: target/*.war
-            tag: ${{ github.ref }}        
+            tag: ${{ github.ref }}
+            
+  test-deploy:
+    name: test-deploy-job-name
+    needs: build
+    runs-on: ubuntu-latest
+    environment: test_deploy
+    
+    steps:
+        - name: Get the tag name
+          run: echo "TAG_NAME=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_ENV
+        - name Download deployment artifact
+          run: mkdir artifacts
+          uses: dsaltares/fetch-gh-release-asset@master
+          with:
+            version: "tags/${{ env.TAG_NAME }}"
+            file: "test-webapp-${{ env.TAG_NAME }}.war"
+            target: "artifacts/test-webapp-${{ env.TAG_NAME }}.war"
+            token: ${{ secrets.GITHUB_TOKEN }}
+         
