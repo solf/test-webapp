@@ -54,4 +54,6 @@ jobs:
             file: "test-webapp-${{ env.TAG_NAME }}.war"
             target: "artifacts/test-webapp-${{ env.TAG_NAME }}.war"
             token: ${{ secrets.GITHUB_TOKEN }}
+        - run: ls -la artifacts/
+        
          
