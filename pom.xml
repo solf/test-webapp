@@ -75,7 +75,7 @@
 								<!-- </includes> -->
 								<directory>${project.basedir}</directory>
 								<includes>
-									<include>build-artifacts/test-webapp.war</include>
+									<include>build-artifacts/*.war</include>
 								</includes>
 							</resource>
 						</resources>

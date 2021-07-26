@@ -46,14 +46,17 @@ jobs:
     steps:
         - name: Get the tag name
           run: echo "TAG_NAME=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_ENV
-        - run: mkdir artifacts
+        - run: mkdir build-artifacts
         - name: Download deployment artifact
           uses: dsaltares/fetch-gh-release-asset@master
           with:
             version: "tags/${{ env.TAG_NAME }}"
             file: "test-webapp-${{ env.TAG_NAME }}.war"
-            target: "artifacts/test-webapp-${{ env.TAG_NAME }}.war"
+            target: "build-artifacts/test-webapp-${{ env.TAG_NAME }}.war"
             token: ${{ secrets.GITHUB_TOKEN }}
-        - run: ls -la artifacts/
+        - run: ls -la build-artifacts/
+        - name: Deploy to Azure
+          run: mvn --batch-mode "-Dtestapp.azure.subscriptionId=${{ secrets_testapp_azure_subscriptionId }}" "-Dtestapp.azure.auth.client=${{ secrets_testapp_azure_auth_client }}" "-Dtestapp.azure.auth.tenant=${{ secrets_testapp_azure_auth_tenant }}" "-Dtestapp.azure.auth.key=${{ secrets_testapp_azure_auth_key }}" azure-webapp:deploy
+
         
          
