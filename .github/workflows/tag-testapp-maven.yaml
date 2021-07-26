@@ -46,8 +46,8 @@ jobs:
     steps:
         - name: Get the tag name
           run: echo "TAG_NAME=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_ENV
-        - run: mkdir artifacts
-        - name Download deployment artifact
+        - name: Download deployment artifact
+          run: mkdir artifacts
           uses: dsaltares/fetch-gh-release-asset@master
           with:
             version: "tags/${{ env.TAG_NAME }}"
