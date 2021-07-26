@@ -1,63 +1,75 @@
 name: tag-testapp-build-yaml
 
 on:
-  push:
-    tags:
+   push:
+      tags:
       - '*'
-
+      
 jobs:
-  build:
-    name: build-job
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Get the tag name
-        run: echo "TAG_NAME=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_ENV
-      - uses: actions/checkout@v2
-      - name: Set up JDK 11
-        uses: actions/setup-java@v2
-        with:
-          java-version: '11'
-          distribution: 'adopt'
-      - name: Cache Maven packages
-        uses: actions/cache@v2
-        with:
-          path: ~/.m2
-          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-m2
-      - name: Set Maven version
-        run: mvn --batch-mode versions:set -DnewVersion=${{ env.TAG_NAME }}
-      - name: Build with Maven
-        run: mvn --batch-mode --update-snapshots verify
-      - name: Upload binaries to release
-        uses: svenstaro/upload-release-action@v2
-        with:
+   build:
+      name: build-job
+      runs-on: ubuntu-latest
+      steps:
+      -  name: Get the tag name
+         run: echo "TAG_NAME=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_ENV
+      -  uses: actions/checkout@v2
+      -  name: Set up JDK 11
+         uses: actions/setup-java@v2
+         with:
+            java-version: '11'
+            distribution: adopt
+      -  name: Cache Maven packages
+         uses: actions/cache@v2
+         with:
+            path: ~/.m2
+            key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+            restore-keys: ${{ runner.os }}-m2
+      -  name: Set Maven version
+         run: mvn --batch-mode versions:set -DnewVersion=${{ env.TAG_NAME }}
+      -  name: Build with Maven
+         run: mvn --batch-mode --update-snapshots verify
+      -  name: Upload binaries to release
+         uses: svenstaro/upload-release-action@v2
+         with:
             repo_token: ${{ secrets.GITHUB_TOKEN }}
             file_glob: true
             file: target/*.war
             tag: ${{ github.ref }}
             
-  test-deploy:
-    name: test-deploy-job-name
-    needs: build
-    runs-on: ubuntu-latest
-    environment: test_deploy
-    
-    steps:
-        - name: Get the tag name
-          run: echo "TAG_NAME=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_ENV
-        - uses: actions/checkout@v2    # need source code for pom.xml with deployment configuration
-        - run: mkdir build-artifacts
-        - name: Download deployment artifact
-          uses: dsaltares/fetch-gh-release-asset@master
-          with:
-            version: "tags/${{ env.TAG_NAME }}"
-            file: "test-webapp-${{ env.TAG_NAME }}.war"
-            target: "build-artifacts/test-webapp-${{ env.TAG_NAME }}.war"
+            
+   test-deploy:
+      name: test-deploy-job-name
+      needs: build
+      runs-on: ubuntu-latest
+      environment: test_deploy
+      steps:
+      -  name: Get the tag name
+         run: echo "TAG_NAME=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_ENV
+      -  uses: actions/checkout@v2    # need source code for pom.xml with deployment configuration
+      -  name: Set up JDK 11
+         uses: actions/setup-java@v2
+         with:
+            java-version: '11'
+            distribution: adopt
+      -  name: Cache Maven packages
+         uses: actions/cache@v2
+         with:
+            path: ~/.m2
+            key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+            restore-keys: ${{ runner.os }}-m2
+      -  run: mkdir build-artifacts
+      -  name: Download deployment artifact
+         uses: dsaltares/fetch-gh-release-asset@master
+         with:
+            version: tags/${{ env.TAG_NAME }}
+            file: test-webapp-${{ env.TAG_NAME }}.war
+            target: build-artifacts/test-webapp-${{ env.TAG_NAME }}.war
             token: ${{ secrets.GITHUB_TOKEN }}
-        - run: ls -la build-artifacts/
-        - name: Deploy to Azure
-          run: mvn --batch-mode "-Dtestapp.azure.subscriptionId=${{ secrets.TESTAPP_AZURE_SUBSCRIPTIONID }}" "-Dtestapp.azure.auth.client=${{ secrets.TESTAPP_AZURE_AUTH_CLIENT }}" "-Dtestapp.azure.auth.tenant=${{ secrets.TESTAPP_AZURE_AUTH_TENANT }}" "-Dtestapp.azure.auth.key=${{ secrets.TESTAPP_AZURE_AUTH_KEY }}" azure-webapp:deploy
-
-        
-         
+      -  run: ls -la build-artifacts/
+      -  name: Deploy to Azure
+         run: mvn --batch-mode 
+            "-Dtestapp.azure.subscriptionId=${{ secrets.TESTAPP_AZURE_SUBSCRIPTIONID }}" 
+            "-Dtestapp.azure.auth.client=${{secrets.TESTAPP_AZURE_AUTH_CLIENT }}" 
+            "-Dtestapp.azure.auth.tenant=${{ secrets.TESTAPP_AZURE_AUTH_TENANT }}" 
+            "-Dtestapp.azure.auth.key=${{secrets.TESTAPP_AZURE_AUTH_KEY }}" 
+            azure-webapp:deploy
