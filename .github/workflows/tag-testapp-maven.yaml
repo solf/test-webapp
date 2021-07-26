@@ -24,7 +24,7 @@ jobs:
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
       - name: Set Maven version
-        run: mvn --batch-mode versions:set -DnewVersion=${{ github.event.ref }}
+        run: mvn --batch-mode versions:set -DnewVersion=${{ github.event.release.tag_name }}
       - name: Build with Maven
         run: mvn --batch-mode --update-snapshots verify
       - name: Upload binaries to release
