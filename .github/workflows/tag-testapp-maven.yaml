@@ -46,6 +46,7 @@ jobs:
     steps:
         - name: Get the tag name
           run: echo "TAG_NAME=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_ENV
+        - uses: actions/checkout@v2    # need source code for pom.xml with deployment configuration
         - run: mkdir build-artifacts
         - name: Download deployment artifact
           uses: dsaltares/fetch-gh-release-asset@master
