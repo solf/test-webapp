@@ -56,7 +56,7 @@ jobs:
             token: ${{ secrets.GITHUB_TOKEN }}
         - run: ls -la build-artifacts/
         - name: Deploy to Azure
-          run: mvn --batch-mode "-Dtestapp.azure.subscriptionId=${{ secrets_testapp_azure_subscriptionId }}" "-Dtestapp.azure.auth.client=${{ secrets_testapp_azure_auth_client }}" "-Dtestapp.azure.auth.tenant=${{ secrets_testapp_azure_auth_tenant }}" "-Dtestapp.azure.auth.key=${{ secrets_testapp_azure_auth_key }}" azure-webapp:deploy
+          run: mvn --batch-mode "-Dtestapp.azure.subscriptionId=${{ secrets.TESTAPP_AZURE_SUBSCRIPTIONID }}" "-Dtestapp.azure.auth.client=${{ secrets.TESTAPP_AZURE_AUTH_CLIENT }}" "-Dtestapp.azure.auth.tenant=${{ secrets.TESTAPP_AZURE_AUTH_TENANT }}" "-Dtestapp.azure.auth.key=${{ secrets.TESTAPP_AZURE_AUTH_KEY }}" azure-webapp:deploy
 
         
          
