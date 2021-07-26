@@ -1,6 +1,9 @@
 name: testapp-build-yaml
 
-on: [push]
+on:
+  push:
+    tags:
+      - '*'
 
 jobs:
   build:
@@ -20,5 +23,14 @@ jobs:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
+      - name: Set Maven version
+        run: mvn --batch-mode versions:set -DnewVersion=${{ github.ref }}
       - name: Build with Maven
         run: mvn --batch-mode --update-snapshots verify
+      - name: Upload binaries to release
+        uses: svenstaro/upload-release-action@v2
+        with:
+            repo_token: ${{ secrets.GITHUB_TOKEN }}
+            file_glob: true
+            file: target/*.war
+            tag: ${{ github.ref }}        
