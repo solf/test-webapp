@@ -11,18 +11,35 @@
 	</encoder>  
 </appender>
 
-  <appender name="FILE" class="ch.qos.logback.core.FileAppender">
-    <file>testFile.log</file>
-    <append>true</append>
-    <!-- set immediateFlush to false for much higher logging throughput -->
-<!--     <immediateFlush>true</immediateFlush> -->
-    <!-- encoders are assigned the type
-         ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
-    <encoder>
-      <pattern>%-4relative [%thread] %marker%-5level %logger{35} - %msg [%mdc]%n</pattern>
-    </encoder>
-  </appender>
+<appender name="APPINS-FILTER"
+	class="ch.qos.logback.core.FileAppender">
+	<file>appins-filter.log</file>
+	<append>false</append>
+	<!-- set immediateFlush to false for much higher logging throughput -->
+	<!-- <immediateFlush>true</immediateFlush> -->
+	<!-- encoders are assigned the type ch.qos.logback.classic.encoder.PatternLayoutEncoder 
+		by default -->
+	<encoder>
+		<pattern>%d{HH:mm:ss.SSS} %marker%5p - %-100m           %d{ISO8601} [%25t] (%35c | %35F:%-5L\) [%mdc] %5p%n</pattern>
+	</encoder>
+</appender>
 
+
+<appender name="FILE" class="ch.qos.logback.core.FileAppender">
+	<file>testFile.log</file>
+	<append>false</append>
+	<!-- set immediateFlush to false for much higher logging throughput -->
+<!-- 	<immediateFlush>true</immediateFlush> -->
+	<!-- encoders are assigned the type ch.qos.logback.classic.encoder.PatternLayoutEncoder 
+		by default -->
+	<encoder>
+		<pattern>%d{HH:mm:ss,SSS} %marker%5p - %-100m           %d{ISO8601} [%25t] (%35c | %35F:%-5L\) [%mdc] %5p%n</pattern>
+	</encoder>
+</appender>
+
+<logger name="com.gethangry.sergey.testwebapp.CustomAppInsightsProcessor" level="info" additivity="false">
+	<appender-ref ref="APPINS-FILTER"/>
+</logger>
 
 <root level="trace">
   <appender-ref ref="STDOUT" />

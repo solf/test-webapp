@@ -24,6 +24,10 @@ import org.slf4j.MDC.MDCCloseable;
 import org.slf4j.Marker;
 import org.slf4j.MarkerFactory;
 
+import com.microsoft.applicationinsights.TelemetryClient;
+import com.microsoft.applicationinsights.TelemetryConfiguration;
+import com.microsoft.applicationinsights.telemetry.SeverityLevel;
+
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -35,7 +39,29 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class WebAppUtil
 {
+	public static final TelemetryClient INSIGHTS;
+	
 	public static final Date LOAD_DATE = new Date();
+	
+	static
+	{
+		String AZURE_TELE_KEY = System.getenv("APPINSIGHTS_INSTRUMENTATIONKEY");
+		log.warn(">>> Instrkey: " + AZURE_TELE_KEY);
+		
+		TelemetryConfiguration configuration = TelemetryConfiguration.getActive();
+		if (AZURE_TELE_KEY != null)
+			configuration.setInstrumentationKey(AZURE_TELE_KEY);
+		
+		configuration.getChannel().setDeveloperMode(true); //logs faster in dev only for performance
+		
+		CustomAppInsightsProcessor customFilter = new CustomAppInsightsProcessor();
+		
+		configuration.getTelemetryProcessors().add(customFilter);
+		
+		INSIGHTS = new TelemetryClient(configuration);
+		
+		log.warn("INSIGHTS TELEMETRY INITIALIZED");
+	}
 	
 	public static void doStuff()
 	{
@@ -49,6 +75,8 @@ public class WebAppUtil
 			log.info("info INFO info -- Testing error logging @ " + new Date());
 			log.warn("warn WARN WARN -- Testing error logging @ " + new Date());
 			err("[2] ERR ERR ERR -- Testing error logging @ " + new Date());
+			
+			INSIGHTS.trackTrace("AZURE MESSAGE", SeverityLevel.Error);
 			
 			@SuppressWarnings("unused") Marker fatal = MarkerFactory.getMarker("FATAL");
 			
