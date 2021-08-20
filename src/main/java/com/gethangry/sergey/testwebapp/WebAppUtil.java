@@ -16,6 +16,7 @@
 package com.gethangry.sergey.testwebapp;
 
 import java.util.Date;
+import java.util.ResourceBundle;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.slf4j.MDC;
@@ -58,5 +59,12 @@ public class WebAppUtil
 	public static void err(String msg)
 	{
 		RedirectClass.err2(msg);
+	}
+	
+	public static String getReleaseTimestamp()
+	{
+		ResourceBundle bundle = ResourceBundle.getBundle("release");
+		
+		return bundle.getString("release.timestamp");
 	}
 }

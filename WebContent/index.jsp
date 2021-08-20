@@ -7,6 +7,8 @@
 <title>(TEST) Application Insights Logging</title>
 </head>
 <body>
+Release timestamp: <%= WebAppUtil.getReleaseTimestamp() %>
+<p>
 Code load date: <%= WebAppUtil.LOAD_DATE %>
 <p>
 Testing Application Insights 1... 2... 3...

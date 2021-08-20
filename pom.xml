@@ -12,6 +12,10 @@
 	
 	<properties>
 		<io.github.solf.extra2.library.version>2.0.0</io.github.solf.extra2.library.version>
+		
+		<maven.build.timestamp.format>YYYY-MM-dd HH:mm:SS</maven.build.timestamp.format>
+		<build.release.timestamp>${maven.build.timestamp}</build.release.timestamp>
+		
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 	
@@ -26,6 +30,14 @@
 	
 	<build>
 <!-- 		<finalName>${project.artifactId}</finalName> -->
+
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources> 
+
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -57,29 +69,35 @@
 					</auth>
 					<schemaVersion>v2</schemaVersion>
 					<subscriptionId>${testapp.azure.subscriptionId}</subscriptionId>
-					<resourceGroup>DefaultFreeResourceGroup</resourceGroup>
-					<appName>s-lv-test</appName>
-					<pricingTier>F1</pricingTier>
-					<region>eastus</region>
-					<runtime>
-						<os>Windows</os>
-						<javaVersion>Java 11</javaVersion>
-						<webContainer>Tomcat 9.0</webContainer>
-					</runtime>
+					<resourceGroup>resourcegroup_development2</resourceGroup>
+					<appName>${testapp.azure.appName}</appName> 					 
+<!-- 					<resourceGroup>DefaultFreeResourceGroup</resourceGroup> -->
+<!-- 					<appName>s-lv-test</appName> -->
+<!-- 					<pricingTier>F1</pricingTier> -->
+<!-- 					<region>eastus</region> -->
+<!-- 					<runtime> -->
+<!-- 						<os>Windows</os> -->
+<!-- 						<javaVersion>Java 11</javaVersion> -->
+<!-- 						<webContainer>Tomcat 9.0</webContainer> -->
+<!-- 					</runtime> -->
 					<deployment>
 						<resources>
 							<resource>
-								<!-- <directory>${project.basedir}/target</directory> -->
-								<!-- <includes> -->
-								<!-- <include>*.war</include> -->
-								<!-- </includes> -->
-								<directory>${project.basedir}</directory>
+								<directory>${project.basedir}/target</directory>
 								<includes>
-									<include>build-artifacts/*.war</include>
+									<include>*.war</include>
 								</includes>
+<!-- 								<directory>${project.basedir}</directory> -->
+<!-- 								<includes> -->
+<!-- 									<include>build-artifacts/*.war</include> -->
+<!-- 								</includes> -->
 							</resource>
 						</resources>
 					</deployment>
+					<deploymentSlot>
+						<name>${testapp.azure.slotName}</name>
+						<configurationSource></configurationSource>
+					</deploymentSlot>					
 				</configuration>
 			</plugin>
 		</plugins>
