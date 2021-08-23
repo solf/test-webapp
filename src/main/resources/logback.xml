@@ -37,11 +37,17 @@
 	</encoder>
 </appender>
 
+<appender name="aiAppender"
+	class="com.gethangry.sergey.insight.HangryApplicationInsightsAppender">
+</appender>
+
+
 <logger name="com.gethangry.sergey.testwebapp.CustomAppInsightsProcessor" level="info" additivity="false">
 	<appender-ref ref="APPINS-FILTER"/>
 </logger>
 
 <root level="trace">
+  <appender-ref ref="aiAppender" />
   <appender-ref ref="STDOUT" />
   <appender-ref ref="FILE" />
 </root>

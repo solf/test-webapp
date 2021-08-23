@@ -46,7 +46,7 @@ public class WebAppUtil
 	static
 	{
 		String AZURE_TELE_KEY = System.getenv("APPINSIGHTS_INSTRUMENTATIONKEY");
-		log.warn(">>> Instrkey: " + AZURE_TELE_KEY);
+		System.out.println(">>> Instrkey: " + AZURE_TELE_KEY);
 		
 		TelemetryConfiguration configuration = TelemetryConfiguration.getActive();
 		if (AZURE_TELE_KEY != null)
